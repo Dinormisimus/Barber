@@ -5,118 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lokacija | Barber Zadar</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* OSNOVNI STILOVI */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
+        body, html { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
 
-        /* Navigacija - ista kao na indexu */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 8%;
-            background: rgba(0,0,0,0.95);
-            width: 100%;
+        /* NAVIGACIJA */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 30px 8%; 
+            background: rgba(18, 18, 18, 0.95);
+            width: 100%; 
             border-bottom: 1px solid #c5a059;
+            z-index: 1000; 
             position: sticky;
             top: 0;
-            z-index: 1000;
         }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            color: #c5a059;
-            text-decoration: none;
-            letter-spacing: 2px;
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #c5a059; 
+            text-decoration: none; 
+            letter-spacing: 2px; 
             text-transform: uppercase;
         }
-
-        nav ul { display: flex; list-style: none; }
+        
+        nav ul { display: flex; list-style: none; transition: 0.4s; }
         nav ul li { margin-left: 30px; }
-        nav ul li a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 14px;
-            text-transform: uppercase;
-            transition: 0.3s;
+        nav ul li a { 
+            text-decoration: none; 
+            color: #fff; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
         }
         nav ul li a:hover { color: #c5a059; }
 
-        /* Sadržaj Lokacije */
-        .content {
-            padding: 80px 8%;
-            text-align: center;
+        /* HAMBURGER */
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 6px; z-index: 1001; }
+        .hamburger span { width: 30px; height: 3px; background: #c5a059; border-radius: 2px; transition: 0.3s; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 6px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -5px); }
+
+        /* LOKACIJA SADRŽAJ */
+        .content { padding: 60px 8%; text-align: center; }
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3.5rem; 
+            color: #c5a059; 
+            margin-bottom: 40px; 
+            text-transform: uppercase; 
+        }
+
+        .location-grid {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            color: #c5a059;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            margin-bottom: 50px;
-            color: #aaa;
-            letter-spacing: 1px;
-            font-weight: 300;
-        }
-
-        /* Kontejner za Mapu i Info */
-        .location-container {
-            display: flex;
-            width: 100%;
-            max-width: 1200px;
+            flex-wrap: wrap;
             gap: 40px;
-            align-items: flex-start;
-            text-align: left;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-content: center;
         }
 
-        .map-wrapper {
-            flex: 2;
+        /* MAPA */
+        .map-container {
+            flex: 1;
+            min-width: 300px;
             height: 450px;
             border: 1px solid #c5a059;
-            position: relative;
+            overflow: hidden;
             opacity: 0;
-            transform: translateX(-30px);
+            transform: scale(0.95);
             transition: 1s all ease;
         }
-
-        .map-wrapper.show { opacity: 1; transform: translateX(0); }
+        .map-container.active { opacity: 1; transform: scale(1); }
 
         iframe {
             width: 100%;
             height: 100%;
             border: 0;
-            /* Filter koji mapu čini tamnom da odgovara dizajnu */
+            /* Filter za Dark Mode kartu */
             filter: grayscale(1) invert(0.9) contrast(1.2);
         }
 
+        /* INFO PANEL */
         .info-panel {
             flex: 1;
-            padding: 20px;
+            min-width: 300px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             opacity: 0;
             transform: translateX(30px);
             transition: 1s all ease;
         }
+        .info-panel.active { opacity: 1; transform: translateX(0); }
 
-        .info-panel.show { opacity: 1; transform: translateX(0); }
+        .info-box { margin-bottom: 30px; }
+        .info-box h3 { 
+            color: #c5a059; 
+            font-family: 'Playfair Display', serif; 
+            margin-bottom: 10px; 
+            font-size: 1.5rem; 
+        }
+        .info-box p { color: #ccc; line-height: 1.6; }
 
-        .info-group { margin-bottom: 30px; }
-        .info-group h3 { color: #c5a059; font-family: 'Playfair Display'; margin-bottom: 10px; font-size: 1.5rem; }
-        .info-group p { color: #ddd; line-height: 1.6; }
-
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; transform: scale(0); transition: 0.5s; }
+        /* WHATSAPP GUMB */
+        .wa-float {
+            position: fixed; bottom: 25px; right: 25px; background: #c5a059; color: #000;
+            padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold;
+            z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center;
+            gap: 10px; transform: scale(0); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .wa-float.visible { transform: scale(1); }
 
-        @media (max-width: 900px) {
-            .location-container { flex-direction: column; }
-            .map-wrapper { width: 100%; height: 300px; }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            nav ul { 
+                position: fixed; 
+                top: 0; 
+                right: -100%; 
+                width: 100%; 
+                height: 100vh; 
+                background: rgba(18, 18, 18, 0.98); 
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center; 
+                z-index: 1000;
+                transition: 0.4s;
+            }
+            nav ul.active { right: 0; }
+            nav ul li { margin: 20px 0; }
+            
+            /* OVAJ DIO JE NEDOSTAJAO ILI JE BIO KRIVI: */
+            nav ul li a { font-size: 24px; } 
+
+            h1 { font-size: 2.5rem; }
+            .map-container { height: 300px; }
         }
     </style>
 </head>
@@ -124,7 +155,10 @@
 
     <nav>
         <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
-        <ul>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+        <ul id="nav-menu">
             <li><a href="index.html">Početna</a></li>
             <li><a href="cjenik.html">Cjenik</a></li>
             <li><a href="galerija.html">Galerija</a></li>
@@ -133,49 +167,63 @@
     </nav>
 
     <div class="content">
-        <h1>Pronađi nas</h1>
-        <p class="subtitle">U srcu Zadra, na usluzi modernom muškarcu</p>
-
-        <div class="location-container">
-            <div class="map-wrapper" id="mapa">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11457.66935731793!2d15.211612387158192!3d44.11601330000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4761fa701e1b6eff%3A0x6667c7555066956a!2sBRANIMIR%20Eat%20%26%20Drink!5e0!3m2!1shr!2shr!4v1772122973645!5m2!1shr!2shr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <h1>Gdje se nalazimo</h1>
+        
+        <div class="location-grid">
+            <div class="map-container" id="mapa">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2867.337144781689!2d15.2285141!3d44.1147816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4761fa10609629a5%3A0x4033b00609311311!2sZadar!5e0!3m2!1shr!2shr!4v1700000000000!5m2!1shr!2shr" allowfullscreen="" loading="lazy"></iframe>
             </div>
 
             <div class="info-panel" id="info">
-                <div class="info-group">
+                <div class="info-box">
                     <h3>Adresa</h3>
-                    <p>Ulica Brijača 123<br>23000 Zadar, Hrvatska</p>
+                    <p>Ulica Vašeg Salona 12<br>23000 Zadar, Hrvatska</p>
                 </div>
-                <div class="info-group">
-                    <h3>Kontakt</h3>
-                    <p>Telefon: +385 91 123 4567<br>Email: info@barberzadar.hr</p>
-                </div>
-                <div class="info-group">
+                <div class="info-box">
                     <h3>Radno Vrijeme</h3>
                     <p>Pon - Pet: 08:00 - 20:00<br>Subota: 08:00 - 14:00<br>Nedjelja: Zatvoreno</p>
+                </div>
+                <div class="info-box">
+                    <h3>Kontakt</h3>
+                    <p>Mob: +385 91 123 4567<br>Email: info@barberzadar.hr</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        window.onload = () => {
-            // Animacija ulaska elemenata
-            document.getElementById('mapa').classList.add('show');
-            setTimeout(() => {
-                document.getElementById('info').classList.add('show');
-            }, 300);
+        // 1. HAMBURGER LOGIKA
+        function setupMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
 
-            // WhatsApp gumb
+        // 2. WHATSAPP GUMB
+        function kreirajWhatsApp() {
             setTimeout(() => {
                 const btn = document.createElement('a');
                 btn.href = "https://wa.me/385911234567";
                 btn.className = "wa-float";
-                btn.innerHTML = "💬 NARUČI SE";
+                btn.innerHTML = "💬 POŠALJI PORUKU";
                 document.body.appendChild(btn);
                 setTimeout(() => btn.classList.add('visible'), 100);
             }, 1000);
-        };
+        }
+
+        // 3. ANIMACIJE
+        window.addEventListener('DOMContentLoaded', () => {
+            setupMenu();
+            kreirajWhatsApp();
+            
+            setTimeout(() => {
+                document.getElementById('mapa').classList.add('active');
+                document.getElementById('info').classList.add('active');
+            }, 300);
+        });
     </script>
 </body>
 </html>
