@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cjenik | Barber Zadar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 30px 8%; background: rgba(0,0,0,0.95); border-bottom: 1px solid #c5a059; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 28px; color: #c5a059; text-decoration: none; text-transform: uppercase; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { text-decoration: none; color: #fff; font-size: 14px; text-transform: uppercase; transition: 0.3s; }
+        nav ul li a:hover { color: #c5a059; }
+
+        .content { padding: 80px 10%; text-align: center; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #c5a059; margin-bottom: 50px; text-transform: uppercase; }
+        
+        .price-container { max-width: 600px; margin: 0 auto; text-align: left; }
+        
+        /* JS Target klase */
+        .price-item { 
+            display: flex; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #333;
+            opacity: 0; transform: translateX(-20px); transition: 0.5s ease;
+        }
+        .price-item.visible { opacity: 1; transform: translateX(0); }
+
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; transform: scale(0); transition: 0.5s; }
+        .wa-float.visible { transform: scale(1); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
+        <ul>
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="cjenik.html">Cjenik</a></li>
+            <li><a href="galerija.html">Galerija</a></li>
+            <li><a href="lokacija.html">Lokacija</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1>Cjenik Usluga</h1>
+        <div class="price-container">
+            <div class="price-item"><span>Klasično šišanje</span><span>15.00 €</span></div>
+            <div class="price-item"><span>Uređivanje brade</span><span>10.00 €</span></div>
+            <div class="price-item"><span>Royal Treatment</span><span>22.00 €</span></div>
+            <div class="price-item"><span>Dječje šišanje</span><span>12.00 €</span></div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            // Animacija stavki jednu po jednu
+            const items = document.querySelectorAll('.price-item');
+            items.forEach((item, index) => {
+                setTimeout(() => { item.classList.add('visible'); }, index * 200);
+            });
+
+            // WhatsApp gumb
+            setTimeout(() => {
+                const btn = document.createElement('a');
+                btn.href = "https://wa.me/385911234567";
+                btn.className = "wa-float";
+                btn.innerHTML = "🕿 REZERVIRAJ";
+                document.body.appendChild(btn);
+                setTimeout(() => btn.classList.add('visible'), 100);
+            }, 1500);
+        };
+    </script>
+</body>
+</html>

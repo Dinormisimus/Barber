@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerija | Barber Zadar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; }
+
+        /* Navigacija */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 8%;
+            background: rgba(0,0,0,0.95);
+            border-bottom: 1px solid #c5a059;
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 28px; color: #c5a059; text-decoration: none; text-transform: uppercase; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { text-decoration: none; color: #fff; font-size: 14px; text-transform: uppercase; transition: 0.3s; }
+        nav ul li a:hover { color: #c5a059; }
+
+        .content { padding: 60px 8%; text-align: center; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #c5a059; margin-bottom: 10px; }
+        .insta-handle { color: #888; margin-bottom: 40px; display: block; text-decoration: none; font-size: 1.1rem; }
+        .insta-handle:hover { color: #c5a059; }
+
+        /* Instagram Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #1a1a1a;
+            cursor: pointer;
+            opacity: 0; /* Za JS animaciju */
+            transform: translateY(20px);
+            transition: 0.5s all ease;
+        }
+
+        .gallery-item.show { opacity: 1; transform: translateY(0); }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.6);
+        }
+
+        /* Ikona na hoveru */
+        .gallery-item::after {
+            content: '📸 Vidi na Instagramu';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: 600;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            width: 100%;
+        }
+
+        .gallery-item:hover::after { opacity: 1; }
+
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; transform: scale(0); transition: 0.5s; }
+        .wa-float.visible { transform: scale(1); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
+        <ul>
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="cjenik.html">Cjenik</a></li>
+            <li><a href="galerija.html">Galerija</a></li>
+            <li><a href="lokacija.html">Lokacija</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1>Galerija</h1>
+        <a href="https://instagram.com/tvoj_profil" class="insta-handle" target="_blank">@barberzadar_official</a>
+
+        <div class="gallery-grid" id="insta-grid">
+            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave1')"><img src="https://images.newrepublic.com/9bba0e56c589fb3e06191969202abb446327a86a.jpeg"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave2')"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave3')"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave4')"><img src="https://cdn.camberwellshopping.com.au/wp-content/uploads/2021/07/13111806/The-best-barbers-in-Camberwell.jpg"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave5')"><img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave6')"><img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=600"></div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            // Animacija slika jednu po jednu
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach((item, index) => {
+                setTimeout(() => { item.classList.add('show'); }, index * 150);
+            });
+
+            // WhatsApp gumb
+            setTimeout(() => {
+                const btn = document.createElement('a');
+                btn.href = "https://wa.me/385911234567";
+                btn.className = "wa-float";
+                btn.innerHTML = "💬 NARUČI SE";
+                document.body.appendChild(btn);
+                setTimeout(() => btn.classList.add('visible'), 100);
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

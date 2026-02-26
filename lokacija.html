@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokacija | Barber Zadar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
+
+        /* Navigacija - ista kao na indexu */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 8%;
+            background: rgba(0,0,0,0.95);
+            width: 100%;
+            border-bottom: 1px solid #c5a059;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #c5a059;
+            text-decoration: none;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        nav ul li a:hover { color: #c5a059; }
+
+        /* Sadržaj Lokacije */
+        .content {
+            padding: 80px 8%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #c5a059;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            margin-bottom: 50px;
+            color: #aaa;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        /* Kontejner za Mapu i Info */
+        .location-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            gap: 40px;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .map-wrapper {
+            flex: 2;
+            height: 450px;
+            border: 1px solid #c5a059;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: 1s all ease;
+        }
+
+        .map-wrapper.show { opacity: 1; transform: translateX(0); }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            /* Filter koji mapu čini tamnom da odgovara dizajnu */
+            filter: grayscale(1) invert(0.9) contrast(1.2);
+        }
+
+        .info-panel {
+            flex: 1;
+            padding: 20px;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: 1s all ease;
+        }
+
+        .info-panel.show { opacity: 1; transform: translateX(0); }
+
+        .info-group { margin-bottom: 30px; }
+        .info-group h3 { color: #c5a059; font-family: 'Playfair Display'; margin-bottom: 10px; font-size: 1.5rem; }
+        .info-group p { color: #ddd; line-height: 1.6; }
+
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; transform: scale(0); transition: 0.5s; }
+        .wa-float.visible { transform: scale(1); }
+
+        @media (max-width: 900px) {
+            .location-container { flex-direction: column; }
+            .map-wrapper { width: 100%; height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
+        <ul>
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="cjenik.html">Cjenik</a></li>
+            <li><a href="galerija.html">Galerija</a></li>
+            <li><a href="lokacija.html">Lokacija</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1>Pronađi nas</h1>
+        <p class="subtitle">U srcu Zadra, na usluzi modernom muškarcu</p>
+
+        <div class="location-container">
+            <div class="map-wrapper" id="mapa">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11457.66935731793!2d15.211612387158192!3d44.11601330000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4761fa701e1b6eff%3A0x6667c7555066956a!2sBRANIMIR%20Eat%20%26%20Drink!5e0!3m2!1shr!2shr!4v1772122973645!5m2!1shr!2shr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <div class="info-panel" id="info">
+                <div class="info-group">
+                    <h3>Adresa</h3>
+                    <p>Ulica Brijača 123<br>23000 Zadar, Hrvatska</p>
+                </div>
+                <div class="info-group">
+                    <h3>Kontakt</h3>
+                    <p>Telefon: +385 91 123 4567<br>Email: info@barberzadar.hr</p>
+                </div>
+                <div class="info-group">
+                    <h3>Radno Vrijeme</h3>
+                    <p>Pon - Pet: 08:00 - 20:00<br>Subota: 08:00 - 14:00<br>Nedjelja: Zatvoreno</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            // Animacija ulaska elemenata
+            document.getElementById('mapa').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('info').classList.add('show');
+            }, 300);
+
+            // WhatsApp gumb
+            setTimeout(() => {
+                const btn = document.createElement('a');
+                btn.href = "https://wa.me/385911234567";
+                btn.className = "wa-float";
+                btn.innerHTML = "💬 NARUČI SE";
+                document.body.appendChild(btn);
+                setTimeout(() => btn.classList.add('visible'), 100);
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
