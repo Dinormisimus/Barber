@@ -5,34 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galerija | Barber Zadar</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* OSNOVNI STILOVI */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; }
+        body, html { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
 
-        /* Navigacija */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 8%;
-            background: rgba(0,0,0,0.95);
+        /* NAVIGACIJA */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 30px 8%; 
+            background: rgba(18, 18, 18, 0.95);
+            width: 100%; 
             border-bottom: 1px solid #c5a059;
+            z-index: 1000; 
+            position: sticky;
+            top: 0;
         }
-        .logo { font-family: 'Playfair Display', serif; font-size: 28px; color: #c5a059; text-decoration: none; text-transform: uppercase; }
-        nav ul { display: flex; list-style: none; }
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #c5a059; 
+            text-decoration: none; 
+            letter-spacing: 2px; 
+        }
+        
+        nav ul { display: flex; list-style: none; transition: 0.4s; }
         nav ul li { margin-left: 30px; }
-        nav ul li a { text-decoration: none; color: #fff; font-size: 14px; text-transform: uppercase; transition: 0.3s; }
+        nav ul li a { 
+            text-decoration: none; 
+            color: #fff; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
+        }
         nav ul li a:hover { color: #c5a059; }
 
-        .content { padding: 60px 8%; text-align: center; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #c5a059; margin-bottom: 10px; }
-        .insta-handle { color: #888; margin-bottom: 40px; display: block; text-decoration: none; font-size: 1.1rem; }
-        .insta-handle:hover { color: #c5a059; }
+        /* HAMBURGER */
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 6px; z-index: 1001; }
+        .hamburger span { width: 30px; height: 3px; background: #c5a059; border-radius: 2px; transition: 0.3s; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 6px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -5px); }
 
-        /* Instagram Grid */
+        /* GALERIJA SADRŽAJ */
+        .content { padding: 60px 8%; text-align: center; }
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3.5rem; 
+            color: #c5a059; 
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+        }
+        .insta-link {
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 40px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .insta-link:hover { color: #c5a059; }
+
+        /* GRID */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 15px;
             max-width: 1200px;
             margin: 0 auto;
@@ -43,51 +85,75 @@
             aspect-ratio: 1 / 1;
             overflow: hidden;
             background: #1a1a1a;
-            cursor: pointer;
-            opacity: 0; /* Za JS animaciju */
+            border: 1px solid #222;
+            opacity: 0;
             transform: translateY(20px);
-            transition: 0.5s all ease;
+            transition: 0.6s all ease;
+            cursor: pointer;
         }
-
-        .gallery-item.show { opacity: 1; transform: translateY(0); }
+        .gallery-item.active { opacity: 1; transform: translateY(0); }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: 0.5s;
+            transition: 0.5s ease;
+            filter: grayscale(30%);
         }
 
         .gallery-item:hover img {
-            transform: scale(1.05);
-            filter: brightness(0.6);
+            transform: scale(1.1);
+            filter: grayscale(0%);
         }
 
-        /* Ikona na hoveru */
+        /* Overlay na hoveru */
         .gallery-item::after {
-            content: '📸 Vidi na Instagramu';
+            content: 'VIDI NA INSTAGRAMU';
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(197, 160, 89, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 1px;
             opacity: 0;
             transition: 0.3s;
-            pointer-events: none;
-            width: 100%;
         }
-
         .gallery-item:hover::after { opacity: 1; }
 
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; transform: scale(0); transition: 0.5s; }
+        /* WHATSAPP GUMB */
+        .wa-float {
+            position: fixed; bottom: 25px; right: 25px; background: #c5a059; color: #000;
+            padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold;
+            z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center;
+            gap: 10px; transform: scale(0); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .wa-float.visible { transform: scale(1); }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            nav ul { 
+                position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; 
+                background: rgba(12, 12, 12, 0.98); flex-direction: column; 
+                justify-content: center; align-items: center; z-index: 1000;
+            }
+            nav ul.active { right: 0; }
+            nav ul li { margin: 20px 0; }
+            h1 { font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
-        <ul>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+        <ul id="nav-menu">
             <li><a href="index.html">Početna</a></li>
             <li><a href="cjenik.html">Cjenik</a></li>
             <li><a href="galerija.html">Galerija</a></li>
@@ -96,28 +162,65 @@
     </nav>
 
     <div class="content">
-        <h1>Galerija</h1>
-        <a href="https://instagram.com/tvoj_profil" class="insta-handle" target="_blank">@barberzadar_official</a>
-
+        <h1>Naši Radovi</h1>
+        <a href="https://instagram.com/TVOJ_PROFIL" class="insta-link" target="_blank">@barberzadar_official</a>
+        
         <div class="gallery-grid" id="insta-grid">
-            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave1')"><img src="https://images.newrepublic.com/9bba0e56c589fb3e06191969202abb446327a86a.jpeg"></div>
-            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave2')"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600"></div>
-            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave3')"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600"></div>
-            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave4')"><img src="https://cdn.camberwellshopping.com.au/wp-content/uploads/2021/07/13111806/The-best-barbers-in-Camberwell.jpg"></div>
-            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave5')"><img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600"></div>
-            <div class="gallery-item" onclick="window.open('https://instagram.com/p/link_objave6')"><img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com')"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com')"><img src="https://images.unsplash.com/photo-1593702275677-f916c8c98ca7?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com')"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com')"><img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com')"><img src="https://images.unsplash.com/photo-1599351431247-f5091e3c319a?w=600"></div>
+            <div class="gallery-item" onclick="window.open('https://instagram.com')"><img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600"></div>
         </div>
     </div>
 
     <script>
-        window.onload = () => {
-            // Animacija slika jednu po jednu
+        // 1. HAMBURGER LOGIKA
+        function setupMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // 2. AUTOMATIZACIJA INSTAGRAMA (OPCIONALNO)
+        // Ako napraviš račun na Behold.so, ovdje zalijepi njihov link
+        async function loadInstagram() {
+            const beholdURL = ""; // Ovdje ide Behold API link
+            
+            if (beholdURL !== "") {
+                try {
+                    const resp = await fetch(beholdURL);
+                    const data = await resp.json();
+                    const grid = document.getElementById('insta-grid');
+                    grid.innerHTML = ''; 
+                    data.forEach(post => {
+                        const item = document.createElement('div');
+                        item.className = 'gallery-item';
+                        item.onclick = () => window.open(post.permalink, '_blank');
+                        item.innerHTML = `<img src="${post.mediaUrl}" alt="Barber Rad">`;
+                        grid.appendChild(item);
+                    });
+                } catch (e) { console.log("Behold greška:", e); }
+            }
+            animateGallery();
+        }
+
+        // 3. ANIMACIJA SLIKA
+        function animateGallery() {
             const items = document.querySelectorAll('.gallery-item');
             items.forEach((item, index) => {
-                setTimeout(() => { item.classList.add('show'); }, index * 150);
+                setTimeout(() => {
+                    item.classList.add('active');
+                }, index * 100);
             });
+        }
 
-            // WhatsApp gumb
+        // 4. WHATSAPP GUMB
+        function kreirajWhatsApp() {
             setTimeout(() => {
                 const btn = document.createElement('a');
                 btn.href = "https://wa.me/385911234567";
@@ -126,7 +229,13 @@
                 document.body.appendChild(btn);
                 setTimeout(() => btn.classList.add('visible'), 100);
             }, 1000);
-        };
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupMenu();
+            loadInstagram();
+            kreirajWhatsApp();
+        });
     </script>
 </body>
 </html>
