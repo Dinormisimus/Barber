@@ -5,80 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barber Zadar | Tradicija i Stil</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="chatbot.css">
     
     <style>
+        /* OSNOVNI STILovi */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
 
-        /* Navigacija */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 30px 8%; position: absolute; width: 100%; z-index: 100; }
-        .logo { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: bold; color: #c5a059; text-decoration: none; letter-spacing: 2px; }
-        nav ul { display: flex; list-style: none; }
+        /* NAVIGACIJA */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 30px 8%; 
+            position: absolute; 
+            width: 100%; 
+            z-index: 1000; 
+        }
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #c5a059; 
+            text-decoration: none; 
+            letter-spacing: 2px; 
+        }
+        
+        nav ul { display: flex; list-style: none; transition: 0.4s; }
         nav ul li { margin-left: 30px; }
-        nav ul li a { text-decoration: none; color: #fff; font-size: 14px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        nav ul li a { 
+            text-decoration: none; 
+            color: #fff; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
+        }
         nav ul li a:hover { color: #c5a059; }
 
-        /* Hero Sekcija */
+        /* HAMBURGER */
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 6px; z-index: 1001; }
+        .hamburger span { width: 30px; height: 3px; background: #c5a059; border-radius: 2px; transition: 0.3s; }
+        
+        /* HAMBURGER ANIMACIJA */
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 6px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -5px); }
+
+        /* HERO SEKCIJA */
         .hero {
-            position: relative; height: 100vh; width: 100%;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+            position: relative; 
+            height: 100vh; 
+            width: 100%;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), 
                         url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            background-size: cover; 
+            background-position: center;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+            padding: 0 20px;
         }
 
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 7vw, 5rem); color: #c5a059; margin-bottom: 10px; text-transform: uppercase; }
+        .hero h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.5rem, 8vw, 5rem); 
+            color: #c5a059; 
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+            line-height: 1.1;
+        }
         
-        /* Ovdje će JS ispisati status */
-        #status-vrijeme { font-size: 14px; margin-bottom: 20px; font-weight: 600; letter-spacing: 2px; }
+        #status-vrijeme { 
+            font-size: 14px; 
+            margin-bottom: 20px; 
+            font-weight: 600; 
+            letter-spacing: 2px; 
+            text-transform: uppercase;
+        }
 
-        .hero p { font-size: 1.1rem; max-width: 600px; color: #ddd; margin-bottom: 40px; }
+        .hero p { font-size: 1.1rem; max-width: 600px; color: #ddd; margin-bottom: 40px; font-weight: 300; }
 
         .btn {
-            background: #c5a059; color: #000; padding: 18px 45px; text-decoration: none; font-weight: bold;
-            text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; border: 2px solid #c5a059;
+            background: #c5a059; 
+            color: #000; 
+            padding: 18px 45px; 
+            text-decoration: none; 
+            font-weight: bold;
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            transition: 0.4s; 
+            border: 2px solid #c5a059;
         }
         .btn:hover { background: transparent; color: #c5a059; }
 
-        /* CSS za animaciju pojavljivanja (JavaScript je aktivira) */
-        .reveal { opacity: 0; transform: translateY(50px); transition: 1s all ease; }
+        /* ANIMACIJE */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Poseban stil za WhatsApp gumb koji će JS napraviti */
+        /* WHATSAPP GUMB */
         .wa-float {
-            position: fixed; bottom: 20px; right: 100px; background: #c5a059; color: black;
-            padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold;
-            z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center;
-            gap: 10px; transform: scale(0); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.3s ease;
+            position: fixed; 
+            bottom: 25px; 
+            right: 25px; 
+            background: #c5a059; 
+            color: #000;
+            padding: 15px 25px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold;
+            z-index: 1000; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+            display: flex; 
+            align-items: center;
+            gap: 10px; 
+            transform: scale(0); 
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 14px;
         }
         .wa-float.visible { transform: scale(1); }
-        .wa-float.chat-open { right: 420px; }
 
-        /* Hamburger Menu */
-        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 6px; z-index: 101; }
-        .hamburger span { width: 25px; height: 3px; background: #c5a059; border-radius: 2px; transition: 0.3s; }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
-
-        /* Mobile Responsiveness */
+        /* RESPONSIVE / MOBITEL */
         @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            
             nav ul { 
                 position: fixed; 
-                top: 80px; 
+                top: 0; 
                 right: -100%; 
-                flex-direction: column; 
-                background: #1a1a1a; 
                 width: 100%; 
-                text-align: center; 
-                transition: 0.3s;
-                padding: 20px 0;
-                z-index: 99;
+                height: 100vh; 
+                background: rgba(18, 18, 18, 0.98); 
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center; 
+                z-index: 1000;
             }
+            
             nav ul.active { right: 0; }
-            nav ul li { margin: 15px 0; }
-            .hamburger { display: flex; }
+            nav ul li { margin: 20px 0; }
+            nav ul li a { font-size: 24px; }
+            
+            .wa-float { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 12px; }
         }
     </style>
 </head>
@@ -86,11 +155,13 @@
 
     <nav>
         <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
+        
         <div class="hamburger" id="hamburger">
             <span></span>
             <span></span>
             <span></span>
         </div>
+
         <ul id="nav-menu">
             <li><a href="index.html">Početna</a></li>
             <li><a href="cjenik.html">Cjenik</a></li>
@@ -100,7 +171,7 @@
     </nav>
 
     <header class="hero">
-        <div id="status-vrijeme">PROVJERAVAM...</div>
+        <div id="status-vrijeme">Provjeravam...</div>
         <h1 class="reveal">Tradicija & Stil</h1>
         <p class="reveal">Vrhunsko iskustvo šišanja u Zadru. Rezerviraj svoj termin kod majstora zanata.</p>
         <a href="cjenik.html" class="btn reveal">Pogledaj ponudu</a>
@@ -111,49 +182,65 @@
         function provjeriRadnoVrijeme() {
             const d = new Date();
             const sat = d.getHours();
-            const dan = d.getDay(); // 0=Ned, 1=Pon...
+            const dan = d.getDay(); 
             const status = document.getElementById('status-vrijeme');
 
             if (dan !== 0 && sat >= 8 && sat < 20) {
-                status.innerHTML = "🟢 TRENUTNO SMO OTVORENI";
+                status.innerHTML = "🟢 Trenutno smo otvoreni";
                 status.style.color = "#c5a059";
             } else {
-                status.innerHTML = "🔴 TRENUTNO SMO ZATVORENI";
+                status.innerHTML = "🔴 Trenutno smo zatvoreni";
                 status.style.color = "#888";
             }
         }
 
-        // 2. SCROLL REVEAL (Animacija pojavljivanja)
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            reveals.forEach(el => {
-                el.classList.add("active"); // Na početnoj stranici odmah ih aktiviramo
+        // 2. HAMBURGER LOGIKA
+        function setupMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            const navLinks = document.querySelectorAll('#nav-menu li a');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
             });
         }
 
-        // 3. WHATSAPP GUMB (Pojavi se nakon 2 sekunde)
+        // 3. SCROLL REVEAL (Aktiviranje odmah za Hero)
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            setTimeout(() => {
+                reveals.forEach(el => el.classList.add("active"));
+            }, 500);
+        }
+
+        // 4. WHATSAPP GUMB
         function kreirajWhatsApp() {
             setTimeout(() => {
                 const btn = document.createElement('a');
-                btn.href = "https://wa.me/385911234567"; // Zamijeni svojim brojem
+                btn.href = "https://wa.me/385911234567"; // PROMIJENI SVOJ BROJ OVDJE
                 btn.className = "wa-float";
                 btn.innerHTML = "💬 NARUČI SE";
                 document.body.appendChild(btn);
-                
-                // Dodaj klasu za animaciju ulaska
                 setTimeout(() => btn.classList.add('visible'), 100);
             }, 2000);
         }
 
-        // POKRENI SVE FUNKCIJE KAD SE STRANICA UČITA
-        window.onload = () => {
+        // POKRENI SVE KAD SE STRANICA UČITA
+        window.addEventListener('DOMContentLoaded', () => {
             provjeriRadnoVrijeme();
+            setupMenu();
             reveal();
             kreirajWhatsApp();
-        };
+        });
     </script>
-    
-    <!-- Chatbot integracija -->
-    <script src="chatbot.js"></script>
-</body>
+
+    </body>
 </html>
