@@ -5,36 +5,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cjenik | Barber Zadar</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* OSNOVNI STILOVI */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 30px 8%; background: rgba(0,0,0,0.95); border-bottom: 1px solid #c5a059; }
-        .logo { font-family: 'Playfair Display', serif; font-size: 28px; color: #c5a059; text-decoration: none; text-transform: uppercase; }
-        nav ul { display: flex; list-style: none; }
+        body, html { font-family: 'Poppins', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
+
+        /* NAVIGACIJA (Ista kao na indexu) */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 30px 8%; 
+            background: rgba(18, 18, 18, 0.95);
+            width: 100%; 
+            border-bottom: 1px solid #c5a059;
+            z-index: 1000; 
+            position: sticky;
+            top: 0;
+        }
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #c5a059; 
+            text-decoration: none; 
+            letter-spacing: 2px; 
+        }
+        
+        nav ul { display: flex; list-style: none; transition: 0.4s; }
         nav ul li { margin-left: 30px; }
-        nav ul li a { text-decoration: none; color: #fff; font-size: 14px; text-transform: uppercase; transition: 0.3s; }
+        nav ul li a { 
+            text-decoration: none; 
+            color: #fff; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
+        }
         nav ul li a:hover { color: #c5a059; }
 
-        .content { padding: 80px 10%; text-align: center; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #c5a059; margin-bottom: 50px; text-transform: uppercase; }
+        /* HAMBURGER */
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 6px; z-index: 1001; }
+        .hamburger span { width: 30px; height: 3px; background: #c5a059; border-radius: 2px; transition: 0.3s; }
         
-        .price-container { max-width: 600px; margin: 0 auto; text-align: left; }
-        
-        /* JS Target klase */
-        .price-item { 
-            display: flex; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #333;
-            opacity: 0; transform: translateX(-20px); transition: 0.5s ease;
-        }
-        .price-item.visible { opacity: 1; transform: translateX(0); }
+        /* HAMBURGER ANIMACIJA */
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 6px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -5px); }
 
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; transform: scale(0); transition: 0.5s; }
+        /* SADRŽAJ CJENIKA */
+        .content {
+            padding: 80px 10%;
+            text-align: center;
+            min-height: 80vh;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #c5a059;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+        }
+
+        .price-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid #333;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: 0.8s all ease;
+        }
+        .price-item.active { opacity: 1; transform: translateX(0); }
+
+        .service-info h3 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .price-value {
+            color: #c5a059;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        /* WHATSAPP GUMB */
+        .wa-float {
+            position: fixed; 
+            bottom: 25px; 
+            right: 25px; 
+            background: #c5a059; 
+            color: #000;
+            padding: 15px 25px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold;
+            z-index: 1000; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+            display: flex; 
+            align-items: center;
+            gap: 10px; 
+            transform: scale(0); 
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .wa-float.visible { transform: scale(1); }
+
+        /* RESPONSIVE / MOBITEL */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            
+            nav ul { 
+                position: fixed; 
+                top: 0; 
+                right: -100%; 
+                width: 100%; 
+                height: 100vh; 
+                background: rgba(18, 18, 18, 0.98); 
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center; 
+                z-index: 1000;
+            }
+            
+            nav ul.active { right: 0; }
+            nav ul li { margin: 20px 0; }
+            nav ul li a { font-size: 24px; }
+            
+            h1 { font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
+
     <nav>
         <a href="index.html" class="logo">BARBER<span>ZADAR</span></a>
-        <ul>
+        
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul id="nav-menu">
             <li><a href="index.html">Početna</a></li>
             <li><a href="cjenik.html">Cjenik</a></li>
             <li><a href="galerija.html">Galerija</a></li>
@@ -44,32 +166,93 @@
 
     <div class="content">
         <h1>Cjenik Usluga</h1>
+        
         <div class="price-container">
-            <div class="price-item"><span>Klasično šišanje</span><span>15.00 €</span></div>
-            <div class="price-item"><span>Uređivanje brade</span><span>10.00 €</span></div>
-            <div class="price-item"><span>Royal Treatment</span><span>22.00 €</span></div>
-            <div class="price-item"><span>Dječje šišanje</span><span>12.00 €</span></div>
+            <div class="price-item">
+                <div class="service-info">
+                    <h3>Klasično šišanje</h3>
+                </div>
+                <div class="price-value">15.00 €</div>
+            </div>
+
+            <div class="price-item">
+                <div class="service-info">
+                    <h3>Uređivanje brade + Vrući ručnik</h3>
+                </div>
+                <div class="price-value">10.00 €</div>
+            </div>
+
+            <div class="price-item">
+                <div class="service-info">
+                    <h3>Šišanje + Brada (Komplet)</h3>
+                </div>
+                <div class="price-value">22.00 €</div>
+            </div>
+
+            <div class="price-item">
+                <div class="service-info">
+                    <h3>Buzz Cut (Mašinica)</h3>
+                </div>
+                <div class="price-value">10.00 €</div>
+            </div>
+
+            <div class="price-item">
+                <div class="service-info">
+                    <h3>Dječje šišanje (do 10 god)</h3>
+                </div>
+                <div class="price-value">12.00 €</div>
+            </div>
         </div>
     </div>
 
     <script>
-        window.onload = () => {
-            // Animacija stavki jednu po jednu
-            const items = document.querySelectorAll('.price-item');
-            items.forEach((item, index) => {
-                setTimeout(() => { item.classList.add('visible'); }, index * 200);
+        // 1. HAMBURGER LOGIKA
+        function setupMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            const navLinks = document.querySelectorAll('#nav-menu li a');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
             });
 
-            // WhatsApp gumb
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+
+        // 2. ANIMACIJA STAVKI CJENIKA
+        function revealPrices() {
+            const prices = document.querySelectorAll('.price-item');
+            prices.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('active');
+                }, index * 150);
+            });
+        }
+
+        // 3. WHATSAPP GUMB
+        function kreirajWhatsApp() {
             setTimeout(() => {
                 const btn = document.createElement('a');
                 btn.href = "https://wa.me/385911234567";
                 btn.className = "wa-float";
-                btn.innerHTML = "🕿 REZERVIRAJ";
+                btn.innerHTML = "💬 REZERVIRAJ TERMIN";
                 document.body.appendChild(btn);
                 setTimeout(() => btn.classList.add('visible'), 100);
-            }, 1500);
-        };
+            }, 1000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupMenu();
+            revealPrices();
+            kreirajWhatsApp();
+        });
     </script>
+
 </body>
 </html>
